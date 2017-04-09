@@ -1,4 +1,9 @@
-% Stepper motor GPIO stuff.
+%% @author Erik L. Arneson <earneson@arnesonium.com>
+%% @copyright 2017 Erik L. Arneson (MIT license)
+%% @version 0.9.0
+%% @doc
+%% A Raspberry Pi GPIO library for the 28BYJ-48 5V stepper motor with a ULN2003 controller board.
+%% @end
 
 -module(stepper).
 -export([init/5, clearMotor/1, forward/2, reverse/2]).
