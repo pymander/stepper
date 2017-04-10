@@ -6,7 +6,7 @@
 %% @end
 
 -module(stepper).
--export([init/5, clearMotor/1, forward/2, reverse/2]).
+-export([init/5, release/1, clearMotor/1, forward/2, reverse/2]).
 -record(motor,
         { delay = 10,
           pins }).
@@ -26,6 +26,12 @@ init(Delay, Pin1, Pin2, Pin3, Pin4) ->
                                     gpio:init(P, out)
                             end,
                             [Pin1, Pin2, Pin3, Pin4])}.
+
+release(Motor) ->
+    lists:map(fun (P) ->
+                      gpio:stop(P)
+              end,
+              Motor#motor.pins).
 
 writeStep(Motor, Step) ->
     lists:zipwith(fun (P, V) ->
