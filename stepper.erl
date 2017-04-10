@@ -39,26 +39,24 @@ clearMotor(Motor) ->
     writeStep(Motor, [0,0,0,0]),
     ok.
 
-forward(Motor, Steps) -> forwardSeq(Motor, Steps, pin_sequence()).
+forward(Motor, Steps) -> loopSequence(Motor, Steps, pin_sequence()).
 
-forwardSeq(Motor, Steps, [H|Seq]) when Steps > 0 ->
+reverse(Motor, Steps) -> loopSequence(Motor, Steps, lists:reverse(pin_sequence())).
+
+writeSequence(Motor, Steps, [H|Seq]) when Steps > 0 ->
     writeStep(Motor, H),
-    forwardSeq(Motor, Steps - 1, Seq);
-forwardSeq(Motor, Steps, []) when Steps > 0 ->
-    forwardSeq(Motor, Steps, pin_sequence());
-forwardSeq(Motor, 0, _) ->
+    writeSequence(Motor, Steps - 1, Seq);
+writeSequence(_Motor, Steps, []) ->
+    Steps;
+writeSequence(_Motor, 0, _) ->
+    0.
+
+loopSequence(Motor, Steps, Sequence) when Steps > 0 ->
+    loopSequence(Motor, writeSequence(Motor, Steps, Sequence), Sequence);
+loopSequence(Motor, 0, _) ->
     clearMotor(Motor).
 
-reverse(Motor, Steps) -> reverseSeq(Motor, Steps, lists:reverse(pin_sequence())).
-
-reverseSeq(Motor, Steps, [H|Seq]) when Steps > 0 ->
-    writeStep(Motor, H),
-    reverseSeq(Motor, Steps - 1, Seq);
-reverseSeq(Motor, Steps, []) when Steps > 0 ->
-    reverseSeq(Motor, Steps, lists:reverse(pin_sequence()));
-reverseSeq(Motor, 0, _) ->
-    clearMotor(Motor).
-
+    
     
     
     
