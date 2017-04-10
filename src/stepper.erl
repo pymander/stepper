@@ -6,7 +6,10 @@
 %% @end
 
 -module(stepper).
+
+%% API exports
 -export([init/5, release/1, clearMotor/1, forward/2, reverse/2]).
+
 -record(motor,
         { delay = 10,
           pins }).
@@ -19,6 +22,10 @@ pin_sequence() -> [[1,0,0,1],
                    [0,0,1,0],
                    [0,0,1,1],
                    [0,0,0,1]].
+
+%%====================================================================
+%% API functions
+%%====================================================================
 
 init(Delay, Pin1, Pin2, Pin3, Pin4) ->
     #motor{delay = Delay,
@@ -33,6 +40,14 @@ release(Motor) ->
               end,
               Motor#motor.pins).
 
+forward(Motor, Steps) -> loopSequence(Motor, Steps, pin_sequence()).
+
+reverse(Motor, Steps) -> loopSequence(Motor, Steps, lists:reverse(pin_sequence())).
+
+%%====================================================================
+%% Internal functions
+%%====================================================================
+
 writeStep(Motor, Step) ->
     lists:zipwith(fun (P, V) ->
                         gpio:write(P, V)
@@ -44,10 +59,6 @@ writeStep(Motor, Step) ->
 clearMotor(Motor) ->
     writeStep(Motor, [0,0,0,0]),
     ok.
-
-forward(Motor, Steps) -> loopSequence(Motor, Steps, pin_sequence()).
-
-reverse(Motor, Steps) -> loopSequence(Motor, Steps, lists:reverse(pin_sequence())).
 
 writeSequence(Motor, Steps, [H|Seq]) when Steps > 0 ->
     writeStep(Motor, H),

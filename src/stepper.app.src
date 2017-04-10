@@ -1,0 +1,15 @@
+{application, stepper,
+ [{description, "Control stepper motors through Raspberry Pi GPIO"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications,
+   [kernel,
+    stdlib
+   ]},
+  {env,[]},
+  {modules, []},
+
+  {maintainers, ["Erik L. Arneson <earneson@arnesonium.com>"]},
+  {licenses, ["MIT"]},
+  {links, ["https://github.com/pymander/stepper"]}
+ ]}.
