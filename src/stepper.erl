@@ -53,7 +53,7 @@ writeStep(Motor, Step) ->
                         gpio:write(P, V)
                   end,
                   Motor#motor.pins, Step),
-    receive after Motor#motor.delay -> ok end,
+    timer:sleep(Motor#motor.delay),
     ok.
 
 clearMotor(Motor) ->
